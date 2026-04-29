@@ -1,0 +1,44 @@
+{
+    "name": "fredts",
+    "version": "1.0.0",
+    "description": "A light TypeScript wrapper for the FRED (Federal Reserve Economic Data) API.",
+    "keywords": [
+        "fred",
+        "federal reserve",
+        "economic data",
+        "typescript"
+    ],
+    "license": "MIT",
+    "author": {
+        "name": "Arthur Lassagne",
+        "url": "https://github.com/arthurlassagne"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/forwardcompany/fredts.git"
+    },
+    "files": [
+        "dist"
+    ],
+    "type": "module",
+    "main": "dist/index.mjs",
+    "types": "dist/index.d.mts",
+    "scripts": {
+        "build": "tsdown",
+        "lint": "oxlint --ignore-pattern 'test/**'",
+        "test": "vitest --run",
+        "check:format": "oxfmt --check **/*",
+        "format": "oxfmt **/*"
+    },
+    "dependencies": {
+        "zod": "^4.3.6"
+    },
+    "devDependencies": {
+        "@types/node": "^24.12.0",
+        "oxfmt": "^0.42.0",
+        "oxlint": "^1.57.0",
+        "tsdown": "^0.21.6",
+        "typescript": "^5.9.3",
+        "vitest": "^4.1.2"
+    }
+}
