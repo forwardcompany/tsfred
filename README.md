@@ -1,21 +1,21 @@
-# fredts
+# tsfred
 A light 🪽 TypeScript wrapper for the FRED (Federal Reserve Economic Data) API 🏦.
 
 ## Installation
 
 ```sh
-npm install fredts
+npm install tsfred
 # or
-pnpm install fredts
+pnpm install tsfred
 # or
-deno install npm:fredts
+deno install npm:tsfred
 # ...
 ```
 
 ## Quick usage
 
 ```ts
-import { Fred } from 'fredts';
+import { Fred } from 'tsfred';
 
 const fred = Fred({ key: process.env.API_KEY! });
 
@@ -38,7 +38,7 @@ The `Fred` constructor supports the following options.
 
 ## Endpoints
 
-This is the list of currently supported endpoints. If yours is not in this list, please [open a request](https://github.com/forwardcompany/fredts/issues).
+This is the list of currently supported endpoints. If yours is not in this list, please [open a request](https://github.com/forwardcompany/tsfred/issues).
 
 ### Series
 
