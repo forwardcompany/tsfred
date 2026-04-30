@@ -23,3 +23,26 @@ export const seriesSchema = z.object({
         }),
     ),
 });
+
+export const seriesObservationsSchema = z.object({
+    realtime_start: z.nullable(z.string()),
+    realtime_end: z.nullable(z.string()),
+    observation_start: z.string(),
+    observation_end: z.string(),
+    units: z.string(),
+    output_type: z.number(),
+    file_type: z.string(),
+    order_by: z.string(),
+    sort_order: z.string(),
+    count: z.number(),
+    offset: z.number(),
+    limit: z.number(),
+    observations: z.array(
+        z.object({
+            realtime_start: z.nullable(z.string()),
+            realtime_end: z.nullable(z.string()),
+            date: z.string(),
+            value: z.string(),
+        }),
+    ),
+});

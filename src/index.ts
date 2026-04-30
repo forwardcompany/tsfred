@@ -1,6 +1,6 @@
 import { z } from "zod/mini";
-import { seriesSchema } from "./schemas.js";
-import type { SeriesParams } from "./types.js";
+import { seriesObservationsSchema, seriesSchema } from "./schemas.js";
+import type { SeriesObservationsParams, SeriesParams } from "./types.js";
 
 export type { SeriesParams };
 
@@ -46,23 +46,16 @@ export class FredClient {
      */
     async #fetch(url: string): Promise<any> {
         const response = await fetch(url, {
-            signal: this.#timeout
-                ? AbortSignal.timeout(this.#timeout)
-                : undefined,
+            signal: this.#timeout ? AbortSignal.timeout(this.#timeout) : undefined,
         });
-        if (!response.ok)
-            throw new Error(`FRED HTTP Error ${response.status} for ${url}`);
+        if (!response.ok) throw new Error(`FRED HTTP Error ${response.status} for ${url}`);
         return response.json();
     }
 
     /**
      * Calls an endpoint, unwraps `{ data, meta }` and returns only `data`.
      */
-    async #callEndpoint<T extends z.ZodMiniType<any>>(
-        endpoint: string,
-        schema: T | null,
-        params: Record<string, any> = {},
-    ): Promise<z.infer<T>> {
+    async #callEndpoint<T extends z.ZodMiniType<any>>(endpoint: string, schema: T | null, params: Record<string, any> = {}): Promise<z.infer<T>> {
         const url = this.#buildUrl(endpoint, params);
         const json = await this.#fetch(url);
         const data = json.data ?? json;
@@ -73,24 +66,36 @@ export class FredClient {
     }
 
     /**
+     * Normalizes series parameters to ensure `series_id` is always present.
+     */
+    #normalizeSeries(params: SeriesParams | string): SeriesParams {
+        return typeof params === "string" ? { series_id: params } : params;
+    }
+
+    /**
      * Calls any endpoint — useful for unsupported or new endpoints.
      */
-    async any<T extends z.ZodMiniType<any>>(
-        endpoint: string,
-        schema: T | null = z.any() as unknown as T,
-        params: Record<string, any> = {},
-    ) {
+    async any<T extends z.ZodMiniType<any>>(endpoint: string, schema: T | null = z.any() as unknown as T, params: Record<string, any> = {}) {
         return this.#callEndpoint(endpoint, schema, params);
     }
 
     /**
-     * Get an economic data series (`/series`).
+     * Get an economic data series (`/series/*`).
      */
-    async series(params: SeriesParams | string) {
-        const normalized =
-            typeof params === "string" ? { series_id: params } : params;
-        return this.#callEndpoint("/series", seriesSchema, normalized);
-    }
+    series = {
+        /**
+         * Get a series (`/series`).
+         */
+        get: async (params: SeriesParams | string) => {
+            return this.#callEndpoint("/series", seriesSchema, this.#normalizeSeries(params));
+        },
+        /**
+         * Get the observations or data values for an economic data series. (`/series/observations`).
+         */
+        observations: async (params: SeriesObservationsParams | string) => {
+            return this.#callEndpoint("/series/observations", seriesObservationsSchema, this.#normalizeSeries(params));
+        },
+    };
 
     // /**
     //  * Historical vessel data (`/vessel_history`).
