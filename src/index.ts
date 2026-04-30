@@ -96,23 +96,6 @@ export class FredClient {
             return this.#callEndpoint("/series/observations", seriesObservationsSchema, this.#normalizeSeries(params));
         },
     };
-
-    // /**
-    //  * Historical vessel data (`/vessel_history`).
-    //  *
-    //  * Returns past positions, speed, course, heading, destination, etc.
-    //  * Specify a time range with `{ from, to }` (dates) or `{ days }`. `from` and `to` are formatted to `YYYY-MM-DD` automatically.
-    //  */
-    // async vesselHistory(params: string) {
-    //     const formatted: Record<string, any> = { ...params };
-    //     if ("from" in formatted && formatted.from !== undefined) {
-    //         formatted.from = formatDay(formatted.from);
-    //     }
-    //     if ("to" in formatted && formatted.to !== undefined) {
-    //         formatted.to = formatDay(formatted.to);
-    //     }
-    //     return this.#callEndpoint("/vessel_history", null, formatted);
-    // }
 }
 
 const client = new FredClient();
