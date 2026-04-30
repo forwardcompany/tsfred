@@ -24,6 +24,16 @@ export const seriesSchema = z.object({
     ),
 });
 
+export const categoriesSchema = z.object({
+    categories: z.array(
+        z.object({
+            id: z.number(),
+            name: z.string(),
+            parent_id: z.number(),
+        }),
+    ),
+});
+
 export const seriesObservationsSchema = z.object({
     realtime_start: z.nullable(z.string()),
     realtime_end: z.nullable(z.string()),

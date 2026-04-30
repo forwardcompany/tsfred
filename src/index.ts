@@ -89,6 +89,14 @@ export class FredClient {
         get: async (params: SeriesParams | string) => {
             return this.#callEndpoint("/series", seriesSchema, this.#normalizeSeries(params));
         },
+
+        /**
+         * Get the categories for an economic data series.
+         */
+        categories: async (params: CategoriesParams | string) => {
+            return this.#callEndpoint("/series/categories", categoriesSchema, this.#normalizeSeries(params));
+        },
+
         /**
          * Get the observations or data values for an economic data series. (`/series/observations`).
          */

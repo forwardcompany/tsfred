@@ -9,9 +9,12 @@ export type SeriesParams = {
     realtime_end?: string;
 };
 
-/**
- * Get the observations or data values for an economic data series.
- */
+export type CategoriesParams = {
+    series_id: string;
+    realtime_start?: string;
+    realtime_end?: string;
+};
+
 export type SeriesObservationsParams = {
     series_id: string;
     realtime_start?: string;
