@@ -1,6 +1,6 @@
 {
     "name": "tsfred",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A light TypeScript wrapper for the FRED (Federal Reserve Economic Data) API.",
     "keywords": [
         "fred",
