@@ -1,6 +1,7 @@
 type Units = "lin" | "chg" | "ch1" | "pch" | "pc1" | "pca" | "cch" | "cca" | "log";
 type Frequency = "d" | "w" | "bw" | "m" | "q" | "sa" | "a" | "wef" | "weth" | "wew" | "wetu" | "wem" | "wesu" | "wesa" | "bwew" | "bwem";
 type AggregationMethod = "avg" | "sum" | "eop";
+type SortOrder = "asc" | "desc";
 
 export type SeriesParams = {
     series_id: string;
@@ -20,7 +21,7 @@ export type SeriesObservationsParams = {
     realtime_end?: string;
     limit?: number;
     offset?: number;
-    sort_order?: "asc" | "desc";
+    sort_order?: SortOrder;
     observation_start?: string;
     observation_end?: string;
     units?: Units;
@@ -56,14 +57,14 @@ export type SearchParams = {
         | "observation_end"
         | "popularity"
         | "group_popularity";
-    sort_order?: "asc" | "desc";
+    sort_order?: SortOrder;
     filter_variable?: "frequency" | "units" | "seasonal_adjustment";
     filter_value?: string;
     tag_names?: string;
     exclude_tag_names?: string;
 };
 
-export type TagsParams = {
+export type SearchTagsParams = {
     series_search_text: string;
     realtime_start?: string;
     realtime_end?: string;
@@ -73,5 +74,27 @@ export type TagsParams = {
     limit?: number;
     offset?: number;
     order_by?: "series_count" | "popularity" | "created" | "name" | "group_id";
-    sort_order?: "asc" | "desc";
+    sort_order?: SortOrder;
+};
+
+export type SearchRelatedTagsParams = SearchTagsParams & {
+    exclude_tag_names?: string;
+};
+
+export type SeriesTagsParams = {
+    series_id: string;
+    realtime_start?: string;
+    realtime_end?: string;
+    order_by?: "series_count" | "popularity" | "created" | "name" | "group_id";
+    sort_order?: SortOrder;
+};
+
+export type UpdatesParams = {
+    realtime_start?: string;
+    realtime_end?: string;
+    limit?: number;
+    offset?: number;
+    filter_value?: "macro" | "regional" | "all";
+    start_time?: string;
+    end_time?: string;
 };

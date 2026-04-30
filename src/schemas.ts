@@ -121,3 +121,33 @@ export const tagsSchema = z.object({
         }),
     ),
 });
+
+export const updatesSchema = z.object({
+    realtime_start: z.string(),
+    realtime_end: z.string(),
+    filter_variable: z.string(),
+    filter_value: z.string(),
+    order_by: z.string(),
+    sort_order: z.string(),
+    count: z.number(),
+    offset: z.number(),
+    limit: z.number(),
+    seriess: z.array(
+        z.object({
+            id: z.string(),
+            realtime_start: z.string(),
+            realtime_end: z.string(),
+            title: z.string(),
+            observation_start: z.string(),
+            observation_end: z.string(),
+            frequency: z.string(),
+            frequency_short: z.string(),
+            units: z.string(),
+            units_short: z.string(),
+            seasonal_adjustment: z.string(),
+            seasonal_adjustment_short: z.string(),
+            last_updated: z.string(),
+            popularity: z.number(),
+        }),
+    ),
+});
