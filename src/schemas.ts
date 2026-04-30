@@ -114,7 +114,7 @@ export const tagsSchema = z.object({
         z.object({
             name: z.string(),
             group_id: z.string(),
-            notes: z.string(),
+            notes: z.union([z.string(), z.undefined(), z.null()]),
             created: z.string(),
             popularity: z.number(),
             series_count: z.number(),
