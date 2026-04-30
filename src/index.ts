@@ -1,12 +1,22 @@
 import { z } from "zod/mini";
-import { seriesObservationsSchema, seriesSchema } from "./schemas.js";
-import type { SeriesObservationsParams, SeriesParams } from "./types.js";
+import { categoriesSchema, releaseSchema, searchSchema, seriesObservationsSchema, seriesSchema, tagsSchema, updatesSchema } from "./schemas.js";
+import type {
+    CategoriesParams,
+    SearchRelatedTagsParams,
+    ReleaseParams,
+    SearchParams,
+    SeriesObservationsParams,
+    SeriesParams,
+    SearchTagsParams,
+    SeriesTagsParams,
+    UpdatesParams,
+} from "./types.js";
 
 export type { SeriesParams };
 
 export class FredClient {
     #apiKey: string = "";
-    #baseUrl: string = "https://api.stlouisfed.org/fred/";
+    #baseUrl: string = "https://api.stlouisfed.org/fred";
     #fileType: "json" | "xml" = "json";
     #validate: boolean = true;
     #debug: boolean = false;
@@ -69,7 +79,7 @@ export class FredClient {
      * Normalizes series parameters to ensure `series_id` is always present.
      */
     #normalizeSeries(params: SeriesParams | string): SeriesParams {
-        return typeof params === "string" ? { series_id: params } : params;
+        return typeof params === "string" ? ({ series_id: params } as SeriesParams) : params;
     }
 
     /**
@@ -89,11 +99,67 @@ export class FredClient {
         get: async (params: SeriesParams | string) => {
             return this.#callEndpoint("/series", seriesSchema, this.#normalizeSeries(params));
         },
+
+        /**
+         * Get the categories for an economic data series.
+         */
+        categories: async (params: CategoriesParams | string) => {
+            return this.#callEndpoint("/series/categories", categoriesSchema, this.#normalizeSeries(params));
+        },
+
         /**
          * Get the observations or data values for an economic data series. (`/series/observations`).
          */
         observations: async (params: SeriesObservationsParams | string) => {
             return this.#callEndpoint("/series/observations", seriesObservationsSchema, this.#normalizeSeries(params));
+        },
+
+        /**
+         * Get the release for an economic data series.
+         */
+        release: async (params: ReleaseParams | string) => {
+            return this.#callEndpoint("/series/release", releaseSchema, this.#normalizeSeries(params));
+        },
+
+        search: {
+            /**
+             * Get economic data series that match keywords.
+             */
+            get: async (params: SearchParams | string) => {
+                const normalized = typeof params === "string" ? ({ search_text: params } as SearchParams) : params;
+                return this.#callEndpoint("/series/search", searchSchema, normalized);
+            },
+
+            /**
+             * Get the tags for a series search.
+             */
+            tags: async (params: SearchTagsParams | string) => {
+                const normalized = typeof params === "string" ? ({ series_search_text: params } as SearchTagsParams) : params;
+                return this.#callEndpoint("/series/search/tags", tagsSchema, normalized);
+            },
+
+            /**
+             * Get the related tags for a series search.
+             */
+            relatedTags: async (params: SearchRelatedTagsParams | string) => {
+                const normalized = typeof params === "string" ? ({ series_search_text: params } as SearchRelatedTagsParams) : params;
+                return this.#callEndpoint("/series/search/related_tags", tagsSchema, normalized);
+            },
+        },
+
+        /**
+         * Get the tags for an economic data series.
+         */
+        tags: async (params: SeriesTagsParams | string) => {
+            const normalized = typeof params === "string" ? ({ series_id: params } as SeriesTagsParams) : params;
+            return this.#callEndpoint("/series/tags", tagsSchema, normalized);
+        },
+
+        /**
+         * Get economic data series sorted by when observations were updated on the FRED® server.
+         */
+        updates: async (params?: UpdatesParams) => {
+            return this.#callEndpoint("/series/updates", updatesSchema, params);
         },
     };
 }
