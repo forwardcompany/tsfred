@@ -6,7 +6,7 @@ export type { SeriesParams };
 
 export class FredClient {
     #apiKey: string = "";
-    #baseUrl: string = "https://api.stlouisfed.org/fred/";
+    #baseUrl: string = "https://api.stlouisfed.org/fred";
     #fileType: "json" | "xml" = "json";
     #validate: boolean = true;
     #debug: boolean = false;
