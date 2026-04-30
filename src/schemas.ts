@@ -56,3 +56,68 @@ export const seriesObservationsSchema = z.object({
         }),
     ),
 });
+
+export const releaseSchema = z.object({
+    realtime_start: z.string(),
+    realtime_end: z.string(),
+    releases: z.array(
+        z.object({
+            id: z.number(),
+            realtime_start: z.string(),
+            realtime_end: z.string(),
+            name: z.string(),
+            press_release: z.boolean(),
+            link: z.string(),
+        }),
+    ),
+});
+
+export const searchSchema = z.object({
+    realtime_start: z.string(),
+    realtime_end: z.string(),
+    order_by: z.string(),
+    sort_order: z.string(),
+    count: z.number(),
+    offset: z.number(),
+    limit: z.number(),
+    seriess: z.array(
+        z.object({
+            id: z.string(),
+            realtime_start: z.string(),
+            realtime_end: z.string(),
+            title: z.string(),
+            observation_start: z.string(),
+            observation_end: z.string(),
+            frequency: z.string(),
+            frequency_short: z.string(),
+            units: z.string(),
+            units_short: z.string(),
+            seasonal_adjustment: z.string(),
+            seasonal_adjustment_short: z.string(),
+            last_updated: z.string(),
+            popularity: z.number(),
+            group_popularity: z.number(),
+            notes: z.string(),
+        }),
+    ),
+});
+
+export const tagsSchema = z.object({
+    realtime_start: z.string(),
+    realtime_end: z.string(),
+    order_by: z.string(),
+    sort_order: z.string(),
+    count: z.number(),
+    offset: z.number(),
+    limit: z.number(),
+    tags: z.array(
+        z.object({
+            name: z.string(),
+            group_id: z.string(),
+            notes: z.string(),
+            created: z.string(),
+            popularity: z.number(),
+            series_count: z.number(),
+        }),
+    ),
+});

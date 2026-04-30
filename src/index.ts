@@ -1,6 +1,6 @@
 import { z } from "zod/mini";
-import { seriesObservationsSchema, seriesSchema } from "./schemas.js";
-import type { SeriesObservationsParams, SeriesParams } from "./types.js";
+import { categoriesSchema, releaseSchema, searchSchema, seriesObservationsSchema, seriesSchema, tagsSchema } from "./schemas.js";
+import type { CategoriesParams, ReleaseParams, SearchParams, SeriesObservationsParams, SeriesParams, TagsParams } from "./types.js";
 
 export type { SeriesParams };
 
@@ -69,7 +69,7 @@ export class FredClient {
      * Normalizes series parameters to ensure `series_id` is always present.
      */
     #normalizeSeries(params: SeriesParams | string): SeriesParams {
-        return typeof params === "string" ? { series_id: params } : params;
+        return typeof params === "string" ? ({ series_id: params } as SeriesParams) : params;
     }
 
     /**
@@ -103,6 +103,52 @@ export class FredClient {
         observations: async (params: SeriesObservationsParams | string) => {
             return this.#callEndpoint("/series/observations", seriesObservationsSchema, this.#normalizeSeries(params));
         },
+
+        /**
+         * Get the release for an economic data series.
+         */
+        release: async (params: ReleaseParams | string) => {
+            return this.#callEndpoint("/series/release", releaseSchema, this.#normalizeSeries(params));
+        },
+
+        search: {
+            /**
+             * Get economic data series that match keywords.
+             */
+            get: async (params: SearchParams | string) => {
+                const normalized = typeof params === "string" ? ({ search_text: params } as SearchParams) : params;
+                return this.#callEndpoint("/series/search", searchSchema, normalized);
+            },
+
+            /**
+             * Get the tags for a series search.
+             */
+            tags: async (params: TagsParams | string) => {
+                const normalized = typeof params === "string" ? ({ series_search_text: params } as TagsParams) : params;
+                return this.#callEndpoint("/series/search/tags", tagsSchema, normalized);
+            },
+
+            // /**
+            //  * Get the related tags for a series search.
+            //  */
+            // relatedTags: async (params: RelatedTagsParams | string) => {
+            //     return this.#callEndpoint("/series/search/related-tags", relatedTagsSchema, this.#normalizeSeries(params));
+            // },
+        },
+
+        // /**
+        //  * Get the tags for an economic data series.
+        //  */
+        // tags: async (params: TagsParams | string) => {
+        //     return this.#callEndpoint("/series/tags", tagsSchema, this.#normalizeSeries(params));
+        // },
+
+        // /**
+        //  * Get economic data series sorted by when observations were updated on the FRED® server.
+        //  */
+        // updates: async (params: UpdatesParams | string) => {
+        //     return this.#callEndpoint("/series/updates", updatesSchema, this.#normalizeSeries(params));
+        // },
     };
 }
 
