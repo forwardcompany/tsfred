@@ -19,8 +19,8 @@ import { Fred } from 'fredts';
 
 const fred = Fred({ key: process.env.API_KEY! });
 
-let sofr = await fred.series.get('SOFR');
-console.log(data.title);
+let series = await fred.series.get('SOFR');
+console.log(series.title);
 ```
 
 ## Options
